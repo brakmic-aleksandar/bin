@@ -1,0 +1,18 @@
+#!/bin/bash
+
+wallpapers_dir=~/.config/wallpapers
+
+monitors_dir="${wallpapers_dir}/monitors"
+tv_dir="${wallpapers_dir}/tv"
+
+current_wallpaper="${wallpapers_dir}/current_wallpaper.png"
+
+
+#pick random wallpapers
+monitor_wallpaper="$(find ${monitors_dir} -type f | shuf -n 1)"
+tv_wallpaper="$(find ${tv_dir} -type f | shuf -n 1)"
+
+# merge wallpapers into one
+gm convert "${monitor_wallpaper}" "${tv_wallpaper}" +append ${current_wallpaper}
+# merge wallpapers into one
+feh --bg-fill --bg-scale --no-fehbg --no-xinerama "${current_wallpaper}"

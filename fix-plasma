@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+'''
+Very hardcoded and bad script that resolves plasma changing ScreenConnectors
+on its own.
+'''
+
+import os
+import pathlib
+import subprocess
+from stat import S_IREAD, S_IRGRP, S_IROTH, S_IWUSR
+
+good_values = {
+    "0" : "0=DP-2\n",
+    "1" : "0=DP-0\n",
+    "2" : "0=HDMI-0\n",
+}
+
+plasmashellrc_path = pathlib.Path.home()/".config/plasmashellrc"
+
+lines = []
+with open(plasmashellrc_path, "r") as reading_file:
+    lines = reading_file.readlines()
+
+# State machine would be nice here :(
+is_int_screen_connectors_section = False
+for i, line in enumerate(lines):
+    stripped_line = line.strip()
+
+    if is_int_screen_connectors_section:
+        #Next section started we are done
+        if stripped_line.startswith("["):
+            break
+
+        parts = stripped_line.split("=")
+        good_val = good_values.get(parts[0], None)
+        if good_val != None:
+            lines[i] = good_val
+
+    if stripped_line == "[ScreenConnectors]":
+        is_int_screen_connectors_section = True
+
+with open(plasmashellrc_path, "w") as writing_file:
+    writing_file.writelines(lines)
+
+subprocess.run(["kquitapp5", "plasmashell"])
+subprocess.run(["kstart5", "plasmashell"])

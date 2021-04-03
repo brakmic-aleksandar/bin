@@ -8,7 +8,6 @@ on its own.
 import os
 import pathlib
 import subprocess
-from stat import S_IREAD, S_IRGRP, S_IROTH, S_IWUSR
 
 good_values = {
     "0" : "0=DP-2\n",

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+level_dp_0=$(monitor-brightness DP-0)
+level_dp_2=$(monitor-brightness DP-2)
+
+if [ $level_dp_0 = 1.0 ]
+then
+	set-monitor-brightness DP-0 0.1
+	set-monitor-brightness DP-2 0.1
+else
+	set-monitor-brightness DP-0 1
+	set-monitor-brightness DP-2 1
+fi
